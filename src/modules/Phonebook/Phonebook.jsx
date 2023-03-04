@@ -16,10 +16,10 @@ const Phonebook = () => {
   const filter = useSelector(store => store.filter);
 
   const dispatch = useDispatch();
-  console.log();
+
   useEffect(() => {
     dispatch(fetchAllContacts());
-  }, []);
+  }, [dispatch]);
 
   const onAddContact = ({ name, number }) => {
     dispatch(fetchAddContact({ name, number }));
