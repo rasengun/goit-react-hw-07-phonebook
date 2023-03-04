@@ -39,8 +39,8 @@ export const fetchDeleteContact = id => {
   const func = async dispatch => {
     try {
       dispatch(actions.fetchaDeleteContactsLoading());
-      const data = await api.deleteContact(id);
-      dispatch(actions.fetchDeleteContactsSuccess(data));
+      await api.deleteContact(id);
+      dispatch(actions.fetchDeleteContactsSuccess(id));
     } catch ({ response }) {
       dispatch(actions.fetchDeleteContactsError(response.data.message));
     }
