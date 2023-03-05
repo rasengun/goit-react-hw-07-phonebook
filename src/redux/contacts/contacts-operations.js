@@ -1,50 +1,48 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import * as api from 'shared/services/api';
 
-import * as actions from './contacts-actions';
-
-export const fetchAllContacts = () => {
-  const func = async dispatch => {
+export const fetchAllContacts = createAsyncThunk(
+  'contacts/fetch-all',
+  async (_, thunkAPI) => {
     try {
-      dispatch(actions.fetchAllContactsLoading());
       const data = await api.getAllContacts();
-      dispatch(actions.fetchAllContactsSuccess(data));
+      return data;
     } catch ({ response }) {
-      dispatch(actions.fetchAllContactsError(response.data.message));
+      return thunkAPI.rejectWithValue(response.data);
     }
-  };
+  }
+);
 
-  return func;
-};
-
-export const fetchAddContact = data => {
-  const func = async (dispatch, getState) => {
+export const fetchAddContact = createAsyncThunk(
+  'contacts/add',
+  async (data, { rejectWithValue }) => {
     try {
-      const { contacts } = getState();
-      if (contacts.items.find(contact => contact.name === data.name)) {
-        alert(`${data.name} is already in contacts`);
-        return;
-      }
-      dispatch(actions.fetchaAddContactsLoading());
       const result = await api.addContact(data);
-      dispatch(actions.fetchaAddContactsLoading(result));
+      return result;
     } catch ({ response }) {
-      dispatch(actions.fetchAddContactsError(response.data.message));
+      return rejectWithValue(response.data);
     }
-  };
+  },
+  {
+    condition: ({ name }, { getState }) => {
+      const { contacts } = getState();
+      if (contacts.items.find(contact => contact.name === name)) {
+        alert(`${name} is already in contacts`);
+        return false;
+      }
+    },
+  }
+);
 
-  return func;
-};
-
-export const fetchDeleteContact = id => {
-  const func = async dispatch => {
+export const fetchDeleteContact = createAsyncThunk(
+  'contacts/delete',
+  async (id, { rejectWithValue }) => {
     try {
-      dispatch(actions.fetchaDeleteContactsLoading());
       await api.deleteContact(id);
-      dispatch(actions.fetchDeleteContactsSuccess(id));
+      return id;
     } catch ({ response }) {
-      dispatch(actions.fetchDeleteContactsError(response.data.message));
+      return rejectWithValue(response.data);
     }
-  };
-
-  return func;
-};
+  }
+);
