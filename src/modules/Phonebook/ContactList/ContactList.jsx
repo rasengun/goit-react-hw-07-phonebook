@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 
 import { ContactListItem } from './ContactListItem';
 
@@ -31,7 +30,3 @@ export const ContactList = () => {
 };
 
 export default ContactList;
-
-ContactList.propTypes = {
-  removeContact: PropTypes.func.isRequired,
-};

@@ -11,44 +11,43 @@ const initialState = {
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
-  extraReducers: {
-    [actions.fetchAllContactsLoading]: store => {
-      store.loading = true;
-    },
-    [actions.fetchAllContactsSuccess]: (store, { payload }) => {
-      store.loading = false;
-      store.items = payload;
-    },
-    [actions.fetchAllContactsError]: (store, { payload }) => {
-      store.loading = false;
-      store.error = payload;
-    },
-    [actions.fetchaAddContactsLoading]: store => {
-      store.loading = true;
-    },
-    [actions.fetchAddContactsSuccess]: (store, { payload }) => {
-      store.loading = false;
-      store.items.push(payload);
-    },
-    [actions.fetchAddContactsError]: (store, { payload }) => {
-      store.loading = false;
-      store.error = payload;
-    },
-
-    [actions.fetchaDeleteContactsLoading]: store => {
-      store.loading = true;
-    },
-    [actions.fetchDeleteContactsSuccess]: (store, { payload }) => {
-      store.loading = false;
-      const index = store.items.findIndex(item => item.id === payload);
-      store.items.splice(index, 1);
-    },
-    [actions.fetchDeleteContactsError]: (store, { payload }) => {
-      store.loading = false;
-      store.error = payload;
-    },
+  extraReducers: builder => {
+    builder
+      .addCase(actions.fetchAllContactsLoading, store => {
+        store.loading = true;
+      })
+      .addCase(actions.fetchAllContactsSuccess, (store, { payload }) => {
+        store.loading = false;
+        store.items = payload;
+      })
+      .addCase(actions.fetchAllContactsError, (store, { payload }) => {
+        store.loading = false;
+        store.error = payload;
+      })
+      .addCase(actions.fetchaAddContactsLoading, store => {
+        store.loading = true;
+      })
+      .addCase(actions.fetchAddContactsSuccess, (store, { payload }) => {
+        store.loading = false;
+        store.items.push(payload);
+      })
+      .addCase(actions.fetchAddContactsError, (store, { payload }) => {
+        store.loading = false;
+        store.error = payload;
+      })
+      .addCase(actions.fetchaDeleteContactsLoading, store => {
+        store.loading = true;
+      })
+      .addCase(actions.fetchDeleteContactsSuccess, (store, { payload }) => {
+        store.loading = false;
+        const index = store.items.findIndex(item => item.id === payload);
+        store.items.splice(index, 1);
+      })
+      .addCase(actions.fetchDeleteContactsError, (store, { payload }) => {
+        store.loading = false;
+        store.error = payload;
+      });
   },
 });
 
-export const { addContact, deleteContact } = contactsSlice.actions;
 export default contactsSlice.reducer;
